@@ -1,5 +1,7 @@
 package LinkedList;
 
+import java.util.NoSuchElementException;
+
 public class LinkedList {
     private class Node {
         private int value;
@@ -12,6 +14,7 @@ public class LinkedList {
 
     private Node first;
     private Node last;
+    private int size;
 
     // addFirst
     public void addFirst(int item) {
@@ -23,7 +26,7 @@ public class LinkedList {
             node.next = first;
             first = node;
         }
-
+        size++;
     }
 
     // addLast
@@ -36,6 +39,7 @@ public class LinkedList {
             last.next = node;
             last = node;
         }
+        size++;
     }
 
     private boolean isEmpty() {
@@ -61,19 +65,14 @@ public class LinkedList {
         return indexOf(item) != -1;
     }
 
-    // removeFirst
-    public void removeFirst(){
-        if(isEmpty())
+    public void removeFirst() {
+        if (isEmpty())
             throw new NoSuchElementException();
-            
-        if(first==last){
-        first = last = null;
-        return;
-        }
 
         var second = first.next;
         first.next = null;
         first = second;
+        size--;
     }
 
     // removeLast
@@ -89,6 +88,7 @@ public class LinkedList {
         var previous = getPrevious(last);
         last = previous;
         last.next = null;
+        size--;
     }
 
     private Node getPrevious(Node node) {
@@ -98,5 +98,39 @@ public class LinkedList {
                 break;
             current = current.next;
         }
+        return null;
+    }
+
+    public int size() {
+        return size;
+    }
+
+    public int[] toArray() {
+        int[] array = new int[size];
+        var current = first;
+        var index = 0;
+        while (current != null) {
+            array[index++] = current.value;
+            current = current.next;
+        }
+        return array;
+    }
+
+    public void reverse() {
+        // [10->20->30]
+        // p c n
+        var previous = first;
+        var current = first.next;
+
+        while (current != null) {
+            var next = current.next;
+            current.next = previous;
+            previous = current;
+            current = next;
+        }
+
+        last = first;
+        last.next = null;
+        first = previous;
     }
 }
